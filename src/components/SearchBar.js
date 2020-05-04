@@ -13,21 +13,31 @@ class SearchBar extends React.Component {
     };
   }
 
-  updateQuery(query) {
-    this.setState({
-      query: query.trim(),
-    });
-    BooksAPI.search(query)
-      .then((books) => {
-        books.map((book) =>
-          this.props.books
-            .filter((b) => b.id === book.id)
-            .map((b) => (book.shelf = b.shelf))
-        );
-        this.setState({ books });
-      })
-      .then((error) => console.log(error, "error"));
-  }
+  updateBooks = (books) => {
+    books.map((book) =>
+      this.props.books
+        .filter((b) => b.id === book.id)
+        .map((b) => (book.shelf = b.shelf))
+    );
+    this.setState({ books });
+  };
+
+  updateQuery = (query) => {
+    this.setState({ query: query });
+    if (query) {
+      BooksAPI.search(query, 20)
+        .then((books) => {
+          books.length > 0
+            ? this.updateBooks(books)
+            : this.setState({ books: [] });
+        })
+        .catch((err) => {
+          console.error(`The API responded with an error: ${err}`);
+        });
+    } else {
+      this.setState({ books: [] });
+    } //With any errors
+  };
 
   render() {
     return (
