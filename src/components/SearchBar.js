@@ -27,6 +27,9 @@ class SearchBar extends React.Component {
     if (query) {
       BooksAPI.search(query, 20)
         .then((books) => {
+          books.map((book) => {
+            return (book["shelf"] = "none");
+          });
           books.length > 0
             ? this.updateBooks(books)
             : this.setState({ books: [] });
