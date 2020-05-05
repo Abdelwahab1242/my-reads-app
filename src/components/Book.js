@@ -16,7 +16,9 @@ class Book extends React.Component {
               width: 128,
               height: 188,
               backgroundImage: `url("${
-                this.props.book.imageLinks.smallThumbnail
+                this.props.book.imageLinks === undefined
+                  ? ""
+                  : this.props.book.imageLinks.smallThumbnail
               }")`,
             }}
           />
@@ -35,8 +37,8 @@ class Book extends React.Component {
             </select>
           </div>
         </div>
-        <div className="book-title">{this.props.title}</div>
-        <div className="book-authors">{this.props.authors}</div>
+        <div className="book-title">{this.props.book.title}</div>
+        <div className="book-authors">{this.props.book.authors}</div>
       </div>
     );
   }
